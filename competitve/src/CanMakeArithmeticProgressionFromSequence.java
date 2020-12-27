@@ -5,27 +5,46 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class Template {
+public class CanMakeArithmeticProgressionFromSequence {
+
+	/*
+	 * https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/
+	 */
 
 	public static void main(String[] args) {
-		testCase(false);
+		testCase();
 	}
 
 	public static void testCases() {
 		FastScanner fs = new FastScanner();
 		int T = fs.nextInt();
 		for (int tt = 0; tt < T; tt++) {
-			testCase(true);
+			testCase();
 		}
 	}
 
-	public static void testCase(boolean flag) {
-		if (flag) {
-			FastScanner fs = new FastScanner();
-		} else {
-			
-		}
+	public static void testCase() {
+		FastScanner fs = new FastScanner();
+		int n = fs.nextInt();
+		int[] arr = fs.readArray(n);
+		print(canMakeArithmeticProgression(arr));
 	}
+	
+	public static boolean canMakeArithmeticProgression(int[] arr) {
+        if(arr.length == 1) {
+            return true;
+        }
+        Arrays.sort(arr);
+        Integer diff = null;
+        for(int i = 1 ; i < arr.length ; i++) {
+        	if(diff == null) {
+        		diff = arr[i] - arr[i-1];
+        		continue;
+        	}
+        	if(diff != arr[i] - arr[i-1]) return false;
+        }
+        return true;
+    }
 
 	static class FastScanner {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -111,9 +130,9 @@ public class Template {
 	static void print(double[] arr) {
 		System.out.println(Arrays.toString(arr));
 	}
-
+	
 	static void print(boolean bool) {
-		System.out.print(String.valueOf(bool));
+		System.out.println(String.valueOf(bool));
 	}
 
 }

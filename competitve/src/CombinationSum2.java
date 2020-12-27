@@ -1,11 +1,20 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class Template {
+public class CombinationSum2 {
+
+	/*
+	 * https://leetcode.com/problems/combination-sum-ii/
+	 */
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -22,8 +31,43 @@ public class Template {
 	public static void testCase(boolean flag) {
 		if (flag) {
 			FastScanner fs = new FastScanner();
+			int n = fs.nextInt();
+			int[] arr = fs.readArray(n);
+			int target = fs.nextInt();
+			print(combinationSum2(arr, target));
 		} else {
-			
+			int[] arr = { 10, 1, 2, 7, 6, 1, 5 };
+			int target = 8;
+			print(combinationSum2(arr, target));
+		}
+	}
+
+	public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
+		if (candidates.length == 0 || target == 0) {
+			return new ArrayList<>();
+		}
+		Set<List<Integer>> result = new HashSet<>();
+		combinationSum2(candidates, target, 0, new ArrayList<>(), result);
+		return new ArrayList<>(result);
+	}
+
+	private static void combinationSum2(int[] candidates, int target, int next, List<Integer> combination,
+			Set<List<Integer>> results) {
+		if (target < 0) {
+			return;
+		}
+		if (target == 0) {
+			List<Integer> copyOfList = new ArrayList<>(combination);
+			Collections.sort(copyOfList);
+			results.add(copyOfList);
+			return;
+		}
+		for (int i = next; i < candidates.length; i++) {
+			combination.add(candidates[i]);
+//			print(combination);
+//			print(target-candidates[i]);
+			combinationSum2(candidates, target - candidates[i], i + 1, combination, results);
+			combination.remove(combination.size() - 1);
 		}
 	}
 

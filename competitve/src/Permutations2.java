@@ -1,11 +1,18 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class Template {
+public class Permutations2 {
+	/*
+	 * https://leetcode.com/problems/permutations/
+	 */
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -23,8 +30,33 @@ public class Template {
 		if (flag) {
 			FastScanner fs = new FastScanner();
 		} else {
-			
+			int[] nums = { 1, 1, 3 };
+			print(permute(nums));
 		}
+	}
+
+	public static List<List<Integer>> permute(int[] nums) {
+		List<List<Integer>> result = new ArrayList<>();
+		permute(nums, 0, result);
+		return result;
+	}
+
+	private static void permute(int[] nums, int start, List<List<Integer>> result) {
+		if(start == nums.length) {
+			result.add(IntStream.of(nums).boxed().collect(Collectors.toList()));
+			return;
+		}
+		for(int i = start ; i < nums.length ; i++) {
+			swap(nums, i ,start);
+			permute(nums, start + 1, result);
+			swap(nums, i, start);
+		}
+	}
+
+	private static void swap(int[] nums, int i, int j) {
+		int temp = nums[i];
+		nums[i] = nums[j];
+		nums[j] = temp;
 	}
 
 	static class FastScanner {

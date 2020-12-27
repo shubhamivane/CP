@@ -5,7 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class Template {
+public class RotateImage {
+
+	/*
+	 * https://leetcode.com/problems/rotate-image/
+	 */
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -23,8 +27,45 @@ public class Template {
 		if (flag) {
 			FastScanner fs = new FastScanner();
 		} else {
-			
+			int[][] matrix = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+//			print(matrix);
+			rotate(matrix);
+			print(matrix);
 		}
+	}
+
+	private static void rotate(int[][] matrix) {
+		if (matrix.length == 0) {
+			return;
+		}
+		transpose(matrix);
+		reverse(matrix);
+	}
+
+	private static void reverse(int[][] matrix) {
+		int matrixLength = matrix.length - 1;
+		for (int i = 0; i < matrix.length / 2; i++) {
+			for (int j = 0; j < matrix.length; j++) {
+//				System.out.println( matrix[j][i] + " " + matrix[j][matrixLength - i]);
+				int temp = matrix[j][i];
+				matrix[j][i] = matrix[j][matrixLength - i];
+				matrix[j][matrixLength - i] = temp;
+			}
+		}
+//		print(matrix);
+	}
+
+	private static void transpose(int[][] matrix) {
+		int temp = 0;
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = i; j < matrix.length; j++) {
+//				System.out.println( matrix[i][j] + " " + matrix[j][i]);
+				temp = matrix[i][j];
+				matrix[i][j] = matrix[j][i];
+				matrix[j][i] = temp;
+			}
+		}
+//		print(matrix);
 	}
 
 	static class FastScanner {
@@ -114,6 +155,12 @@ public class Template {
 
 	static void print(boolean bool) {
 		System.out.print(String.valueOf(bool));
+	}
+
+	static void print(int[][] matrix) {
+		for (int i = 0; i < matrix.length; i++) {
+			print(matrix[i]);
+		}
 	}
 
 }

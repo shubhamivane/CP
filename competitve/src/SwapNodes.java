@@ -1,9 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class P25A {
+public class SwapNodes {
 
 	public static void main(String[] args) {
 		testCase();
@@ -17,21 +18,38 @@ public class P25A {
 		}
 	}
 
+	public static void nextPermutation(int[] nums) {
+		int startIdx = -1;
+		int endIdx = nums.length;
+		boolean flag = false;
+		for (int i = nums.length - 1; i > 0; i--) {
+			for (int j = i - 1; j >= 0; j--) {
+				System.out.println("nums[" + i + "] = " + nums[i] + ", nums[" + j + "] = " + nums[j]);
+				if (nums[i] > nums[j]) {
+					int temp = nums[i];
+					nums[i] = nums[j];
+					nums[j] = temp;
+					startIdx = j;
+					endIdx = i;
+					System.out.println(startIdx + " " + nums[startIdx] + " " + endIdx + " " + nums[endIdx]);
+					flag = true;
+					break;
+				}
+			}
+			if (flag)
+				break;
+		}
+		if (endIdx - startIdx > 1) {
+			Arrays.sort(nums, startIdx + 1, nums.length);
+		}
+	}
+
 	public static void testCase() {
 		FastScanner fs = new FastScanner();
 		int n = fs.nextInt();
 		int[] arr = fs.readArray(n);
-		int oddCnt = 0, evenCnt = 0, oddIdx = 1, evenIdx = 1;
-		for (int i = 0; i < n; i++) {
-			if (arr[i] % 2 == 0) {
-				evenCnt++;
-				evenIdx = i;
-			} else {
-				oddCnt++;
-				oddIdx = i;
-			}
-		}
-		System.out.print((oddCnt == 1 ? oddIdx : evenIdx) + 1);
+		nextPermutation(arr);
+		System.out.print(Arrays.toString(arr));
 	}
 
 	static class FastScanner {

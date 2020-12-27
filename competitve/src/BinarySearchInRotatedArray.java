@@ -1,9 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class P25A {
+public class BinarySearchInRotatedArray {
 
 	public static void main(String[] args) {
 		testCase();
@@ -20,20 +21,45 @@ public class P25A {
 	public static void testCase() {
 		FastScanner fs = new FastScanner();
 		int n = fs.nextInt();
+		int target = fs.nextInt();
 		int[] arr = fs.readArray(n);
-		int oddCnt = 0, evenCnt = 0, oddIdx = 1, evenIdx = 1;
-		for (int i = 0; i < n; i++) {
-			if (arr[i] % 2 == 0) {
-				evenCnt++;
-				evenIdx = i;
-			} else {
-				oddCnt++;
-				oddIdx = i;
-			}
-		}
-		System.out.print((oddCnt == 1 ? oddIdx : evenIdx) + 1);
+		print(findPivot(arr));
+		print(search(arr, target));
 	}
 
+	public static int search(int[] nums, int target) {
+		int pivotIdx = findPivot(nums);
+		int result = -1;
+		if(nums[nums.length-1] >= target) {
+			result = Arrays.binarySearch(Arrays.copyOfRange(nums, pivotIdx, nums.length), target);
+			return result < 0 ? -1 : (result + pivotIdx);
+		} else {
+			result = Arrays.binarySearch(Arrays.copyOfRange(nums, 0, pivotIdx), target);
+			return result < 0 ? -1 : result;
+		}
+	}
+
+	private static int findPivot(int[] nums) {
+		int mid;
+		int r = nums.length - 1;
+		int l = 0;
+		while (l < r) {
+			mid = l + (r - l) / 2;
+			if ((mid - 1 < 0 || nums[mid - 1] > nums[mid]) && (mid + 1 == nums.length || nums[mid + 1] > nums[mid])) {
+				return mid;
+			}
+			if (nums[mid] < nums[r]) {
+				r = mid - 1;
+			} else
+				l = mid + 1;
+		}
+		return l;
+	}
+
+	private static void print(int findPivot) {
+		System.out.println(findPivot);
+	}
+	
 	static class FastScanner {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer("");

@@ -1,11 +1,17 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class Template {
+public class CombinationSum {
+
+	/*
+	 * https://leetcode.com/problems/combination-sum/
+	 */
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -22,8 +28,40 @@ public class Template {
 	public static void testCase(boolean flag) {
 		if (flag) {
 			FastScanner fs = new FastScanner();
+			int n = fs.nextInt();
+			int[] arr = fs.readArray(n);
+			int target = fs.nextInt();
+			print(combinationSum(arr, target));
 		} else {
-			
+			int[] arr = { 2, 3, 6, 7 };
+			int target = 7;
+			print(combinationSum(arr, target));
+		}
+	}
+
+	public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+		if (candidates.length == 0 || target == 0) {
+			return new ArrayList<>();
+		}
+		List<List<Integer>> result = new ArrayList<>();
+		combinationSum(candidates, target, 0, new ArrayList<>(), result);
+		return result;
+	}
+
+	private static void combinationSum(int[] candidates, int target, int start, List<Integer> combination, List<List<Integer>> results) {
+		if (target < 0) {
+			return;
+		}
+		if(target == 0) {
+			results.add(new ArrayList<>(combination));
+			return;
+		}
+		for(int i = start ; i < candidates.length ; i++) {
+			combination.add(candidates[i]);
+//			print(combination);
+//			print(target-candidates[i]);
+			combinationSum(candidates, target - candidates[i], i, combination, results);
+			combination.remove(combination.size()-1);
 		}
 	}
 

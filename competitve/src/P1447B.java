@@ -3,10 +3,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class P25A {
+public class P1447B {
 
 	public static void main(String[] args) {
-		testCase();
+		testCases();
 	}
 
 	public static void testCases() {
@@ -19,19 +19,22 @@ public class P25A {
 
 	public static void testCase() {
 		FastScanner fs = new FastScanner();
-		int n = fs.nextInt();
-		int[] arr = fs.readArray(n);
-		int oddCnt = 0, evenCnt = 0, oddIdx = 1, evenIdx = 1;
-		for (int i = 0; i < n; i++) {
-			if (arr[i] % 2 == 0) {
-				evenCnt++;
-				evenIdx = i;
-			} else {
-				oddCnt++;
-				oddIdx = i;
+		int row = fs.nextInt();
+		int col = fs.nextInt();
+		int[][] grid = fs.readIntGrid(row, col);
+		int nonZeroNumCnt = 0;
+		int minElement = Integer.MAX_VALUE;
+		int sum = 0;
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				if (grid[i][j] > 0) {
+					nonZeroNumCnt++;
+				}
+				sum += Math.abs(grid[i][j]);
+				minElement = Math.abs(grid[i][j]) < minElement ? Math.abs(grid[i][j]) : minElement;
 			}
 		}
-		System.out.print((oddCnt == 1 ? oddIdx : evenIdx) + 1);
+		System.out.println(nonZeroNumCnt % 2 == 0 ? sum : (sum - 2 * minElement));
 	}
 
 	static class FastScanner {
@@ -76,6 +79,16 @@ public class P25A {
 			for (int i = 0; i < n; i++)
 				a[i] = nextLong();
 			return a;
+		}
+
+		int[][] readIntGrid(int row, int col) {
+			int[][] grid = new int[row][col];
+			for (int i = 0; i < row; i++) {
+				for (int j = 0; j < col; j++) {
+					grid[i][j] = nextInt();
+				}
+			}
+			return grid;
 		}
 	}
 

@@ -3,28 +3,72 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 
-public class Template {
+public class FindFirstAndLastPositionOfElementInSortedArray {
 
+	/*
+	 * https://leetcode.com/problems/find-first-and-last-position-of-element-in-
+	 * sorted-array/
+	 */
 	public static void main(String[] args) {
-		testCase(false);
+//		testCase();
+		HashSet<String> s = new HashSet<>();
+		s.add("a");
+		s.add("a");
 	}
 
 	public static void testCases() {
 		FastScanner fs = new FastScanner();
 		int T = fs.nextInt();
 		for (int tt = 0; tt < T; tt++) {
-			testCase(true);
+			testCase();
 		}
 	}
 
-	public static void testCase(boolean flag) {
-		if (flag) {
-			FastScanner fs = new FastScanner();
-		} else {
-			
+	public static void testCase() {
+		FastScanner fs = new FastScanner();
+		int n = fs.nextInt();
+		int target = fs.nextInt();
+		int[] arr = fs.readArray(n);
+		int[] ans = new int[2];
+		ans[0] = binarySearchFindFirstOccurence(arr, target);
+		ans[1] = binarySearchFindLastOccurence(arr, target);
+		print(ans);
+	}
+
+	public static int binarySearchFindFirstOccurence(int[] arr, int target) {
+		int mid, right = arr.length - 1, left = 0;
+		int startIdx = Integer.MAX_VALUE;
+		while (left <= right) {
+			mid = left + (right - left) / 2;
+			if(arr[mid] >= target) {
+				if(arr[mid] == target) startIdx = Math.min(startIdx, mid);
+				right = mid - 1;
+//				print(startIdx);
+			}
+			if(arr[mid] < target) {
+				left = mid + 1;
+			}
 		}
+		return startIdx == Integer.MAX_VALUE ? -1 : startIdx;
+	}
+	
+	public static int binarySearchFindLastOccurence(int[] arr, int target) {
+		int mid, right = arr.length - 1, left = 0;
+		int endIdx = -1;
+		while (left <= right) {
+			mid = left + (right - left) / 2;
+			if(arr[mid] > target) {
+				right = mid - 1;
+			}
+			if(arr[mid] <= target) {
+				if(arr[mid] == target) endIdx = Math.max(endIdx, mid);
+				left = mid + 1;
+			}
+		}
+		return endIdx;
 	}
 
 	static class FastScanner {
@@ -71,7 +115,7 @@ public class Template {
 			return a;
 		}
 	}
-
+	
 	static void print(int n) {
 		System.out.println(n);
 	}
@@ -110,10 +154,6 @@ public class Template {
 
 	static void print(double[] arr) {
 		System.out.println(Arrays.toString(arr));
-	}
-
-	static void print(boolean bool) {
-		System.out.print(String.valueOf(bool));
 	}
 
 }

@@ -1,11 +1,22 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class Template {
+public class GroupAnagrams {
+
+	/*
+	 * https://leetcode.com/problems/group-anagrams/
+	 */
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -21,10 +32,37 @@ public class Template {
 
 	public static void testCase(boolean flag) {
 		if (flag) {
-			FastScanner fs = new FastScanner();
 		} else {
-			
+//			String[] strs = { "eat", "tea", "tan", "ate", "nat", "bat" };
+			String[] strs = { "bdddddddddd", "bbbbbbbbbbc" };
+
+			print(groupAnagrams(strs));
 		}
+	}
+
+	public static List<List<String>> groupAnagrams(String[] strs) {
+		if (strs.length == 0) {
+			return new ArrayList<>();
+		}
+		Map<String, List<String>> anagramMap = new HashMap<>();
+		for (String string : strs) {
+			int[] cntArray = new int[26];
+			for (int i = 0; i < 26; i++)
+				cntArray[i] = 0;
+			for (int i = 0; i < string.length(); i++) {
+				cntArray[string.charAt(i) - 'a']++;
+			}
+			String anagramKey = IntStream.of(cntArray).boxed().map(String::valueOf).collect(Collectors.joining("-"));
+			print(anagramKey);
+			if (anagramMap.containsKey(anagramKey)) {
+				anagramMap.get(anagramKey).add(string);
+			} else {
+				List<String> anagramList = new ArrayList<>();
+				anagramList.add(string);
+				anagramMap.put(anagramKey, anagramList);
+			}
+		}
+		return anagramMap.entrySet().stream().map(Entry::getValue).collect(Collectors.toList());
 	}
 
 	static class FastScanner {
