@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class Template {
+public class JumpGame {
+	/*
+	 * https://leetcode.com/problems/jump-game/
+	 */
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -23,8 +26,24 @@ public class Template {
 		if (flag) {
 			FastScanner fs = new FastScanner();
 		} else {
-			
+//			int[] nums = {2,3,1,1,4};
+			int[] nums = {1,0,1,0,4};
+			print(canJump(nums));
 		}
+	}
+
+	private static boolean canJump (int[] nums) {
+		if(nums.length == 1) {
+			return true;
+		}
+		int maxIdx = 0;
+		for(int i  = 0 ; i < nums.length - 1; i++) {
+			if(maxIdx < i) {
+				return false;
+			}
+			maxIdx = Math.max(maxIdx, i + nums[i]);
+		}
+		return maxIdx >= nums.length-1;
 	}
 
 	static class FastScanner {
@@ -114,12 +133,6 @@ public class Template {
 
 	static void print(boolean bool) {
 		System.out.print(String.valueOf(bool));
-	}
-
-	static void print(int[][] arr) {
-		for(int i = 0 ; i < arr.length ; i++) {
-			print(arr[i]);
-		}
 	}
 
 }

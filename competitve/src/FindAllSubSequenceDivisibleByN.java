@@ -1,11 +1,15 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class Template {
+public class FindAllSubSequenceDivisibleByN {
 
 	public static void main(String[] args) {
 		testCase(false);
@@ -23,8 +27,24 @@ public class Template {
 		if (flag) {
 			FastScanner fs = new FastScanner();
 		} else {
-			
+			int n = 19;
+			int[] arr = { 1, 7, 1};
+			Set<Integer> subSequences = new HashSet<>();
+			findAllSubSequencesDibisibleByN(arr, 0, 0, n, subSequences);
+			print(subSequences);
 		}
+	}
+
+	private static void findAllSubSequencesDibisibleByN(int[] arr, int idx, int num, int n,
+			Set<Integer> subSequences) {
+		if(num != 0 && num % n == 0) {
+			subSequences.add(num);
+		}
+		if(idx == arr.length) {
+			return;
+		}
+		findAllSubSequencesDibisibleByN(arr, idx + 1, num, n, subSequences);
+		findAllSubSequencesDibisibleByN(arr, idx + 1, num * 10 + arr[idx], n, subSequences);
 	}
 
 	static class FastScanner {
@@ -114,12 +134,6 @@ public class Template {
 
 	static void print(boolean bool) {
 		System.out.print(String.valueOf(bool));
-	}
-
-	static void print(int[][] arr) {
-		for(int i = 0 ; i < arr.length ; i++) {
-			print(arr[i]);
-		}
 	}
 
 }

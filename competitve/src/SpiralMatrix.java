@@ -1,12 +1,13 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Template {
+public class SpiralMatrix {
 
+	/*
+	 *	https://leetcode.com/problems/spiral-matrix/
+	 */
 	public static void main(String[] args) {
 		testCase(false);
 	}
@@ -23,8 +24,50 @@ public class Template {
 		if (flag) {
 			FastScanner fs = new FastScanner();
 		} else {
-			
+//			int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+//			int[][] matrix = {{1,2,3,4},{5,6,7,8},{9,10,11,12}, {13,14,15,16}};
+//			int[][] matrix = {{1},{2},{3}};
+			int[][] matrix = {{1,2},{3,4},{5,6}};
+			print(spiralOrder(matrix));
 		}
+	}
+
+	public static List<Integer> spiralOrder(int[][] matrix) {
+		List<Integer> result = new ArrayList<>();
+		int rows = matrix.length;
+		int cols = matrix[0].length;
+		int i = 0, k = 0;
+		while(true) {
+			if(i >= (rows+1)/2 || k >= (cols+1)/2) break;
+			result.add(matrix[i][i]);
+			int row = i;
+			int col = i + 1;
+			for(int j = col ; j < cols - i; j++) {
+//				System.out.println("1. row: " + row + " col: " + j);
+				result.add(matrix[row][j]);
+			}
+			row = i + 1;
+			col = cols - i - 1;
+			for(int j = row ; j < rows - i ; j++) {
+//				System.out.println("2. row: " + j + " col: " + col);
+				result.add(matrix[j][col]);
+			}
+			row = rows - i - 1;
+			col = cols - i - 1 - 1;
+			for(int j = col ; j >= i && row > i ; j--) {
+//				System.out.println("3. row: " + row + " col: " + j);
+				result.add(matrix[row][j]);
+			}
+			row = rows - i - 1 - 1;
+			col = i;
+			for(int j = row ; j > i && col < cols - 1 - i; j--) {
+//				System.out.println("4. row: " + j + " col: " + col);
+				result.add(matrix[j][col]);
+			}
+			i++;
+			k++;
+		}
+		return result;
 	}
 
 	static class FastScanner {
@@ -114,12 +157,6 @@ public class Template {
 
 	static void print(boolean bool) {
 		System.out.print(String.valueOf(bool));
-	}
-
-	static void print(int[][] arr) {
-		for(int i = 0 ; i < arr.length ; i++) {
-			print(arr[i]);
-		}
 	}
 
 }
