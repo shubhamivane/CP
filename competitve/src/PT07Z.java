@@ -3,45 +3,78 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.*;
 import java.util.StringTokenizer;
 
-public class P1463A {
+public class PT07Z {
+
+    /*
+     * https://www.spoj.com/problems/PT07Z/
+     */
+    private static Map<Integer, List<Integer>> graph = new HashMap<>();
+    private static int maxLength = 0;
 
     public static void main (String[] args) {
-        testCases();
+        testCase(true);
     }
 
     public static void testCases () {
         FastScanner fs = new FastScanner();
         int T = fs.nextInt();
-        int n = 3;
-        long sum;
         for (int tt = 0 ; tt < T ; tt++) {
-            long[] arr = fs.readLongArray(n);
-            sum = 0;
-            sum += arr[0];
-            sum += arr[1];
-            sum += arr[2];
-            if (sum % 9 != 0) {
-                System.out.println("NO");
-                continue;
-            }
-            long k = sum / 9;
-            long min = Math.min(Math.min(arr[0], arr[1]), arr[2]);
-            if(min < k) {
-                System.out.println("NO");
-                continue;
-            }
-            System.out.println("YES");
+            testCase(true);
         }
     }
 
     public static void testCase (boolean flag) {
         if (flag) {
             FastScanner fs = new FastScanner();
+            int n = fs.nextInt();
+            int nodeSize = n;
+            int[] arr;
+            n--;
+            int[] visited = new int[nodeSize+1];
+            Arrays.fill(visited, 0);
+            while (n-- > 0) {
+                arr = fs.readArray(2);
+                visited[arr[0]] += 1;
+                visited[arr[1]] += 1;
+                addEdge(arr[0], arr[1]);
+                addEdge(arr[1], arr[0]);
+            }
+            int start = 0;
+            for(int i: visited) {
+                if(i == 1) {
+                    start = i;
+                    break;
+                }
+            }
+            Arrays.fill(visited, 0);
+            DFS(start, visited, 0);
+            print(maxLength);
         } else {
 
         }
+    }
+
+    private static int DFS(int start, int[] visited, int sizeOfThePath) {
+//        print("sizeOfThePath: " + sizeOfThePath);
+        if(visited[start] == 1) {
+            return ;
+        }
+        visited[start] = 1;
+        int m, m1=-1, m2=-1;
+        for(int ele: graph.get(start)) {
+            m = DFS(ele, visited, sizeOfThePath + 1);
+        }
+        maxLength = Math.max(maxLength, sizeOfThePath);
+    }
+
+    private static void addEdge (int node1, int node2) {
+        List<Integer> node1AdjacencyList = graph.getOrDefault(node1, new ArrayList<>());
+        node1AdjacencyList.add(node2);
+        graph.put(node1, node1AdjacencyList);
     }
 
     static class FastScanner {
@@ -126,6 +159,10 @@ public class P1463A {
     }
 
     static void print (double[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+
+    static void print (boolean[] arr) {
         System.out.println(Arrays.toString(arr));
     }
 

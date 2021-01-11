@@ -5,40 +5,38 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class P1463A {
+public class GSS1 {
 
     public static void main (String[] args) {
-        testCases();
+        testCase(true);
     }
 
     public static void testCases () {
         FastScanner fs = new FastScanner();
         int T = fs.nextInt();
-        int n = 3;
-        long sum;
         for (int tt = 0 ; tt < T ; tt++) {
-            long[] arr = fs.readLongArray(n);
-            sum = 0;
-            sum += arr[0];
-            sum += arr[1];
-            sum += arr[2];
-            if (sum % 9 != 0) {
-                System.out.println("NO");
-                continue;
-            }
-            long k = sum / 9;
-            long min = Math.min(Math.min(arr[0], arr[1]), arr[2]);
-            if(min < k) {
-                System.out.println("NO");
-                continue;
-            }
-            System.out.println("YES");
+            testCase(true);
         }
     }
 
     public static void testCase (boolean flag) {
         if (flag) {
             FastScanner fs = new FastScanner();
+            int n = fs.nextInt();
+            int[] arr = fs.readArray(n);
+            long[] prefixSum = new long[n];
+            for (int i = 0 ; i < n ; i++) {
+                if (i == 0) {
+                    prefixSum[i] = arr[i];
+                    continue;
+                }
+                prefixSum[i] = Math.max(prefixSum[i - 1], prefixSum[i - 1] + arr[i]);
+            }
+            int m = fs.nextInt();
+            while (m-- > 0) {
+                int[] query = fs.readArray(2);
+                System.out.println(query[1] != query[0] ? ( prefixSum[query[1] - 1] - prefixSum[query[0] - 1] ) : prefixSum[query[0] - 1]);
+            }
         } else {
 
         }

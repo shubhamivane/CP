@@ -1,38 +1,19 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class P1463A {
+public class NumberOfInversions {
 
     public static void main (String[] args) {
-        testCases();
+        testCase(false);
     }
 
     public static void testCases () {
         FastScanner fs = new FastScanner();
         int T = fs.nextInt();
-        int n = 3;
-        long sum;
         for (int tt = 0 ; tt < T ; tt++) {
-            long[] arr = fs.readLongArray(n);
-            sum = 0;
-            sum += arr[0];
-            sum += arr[1];
-            sum += arr[2];
-            if (sum % 9 != 0) {
-                System.out.println("NO");
-                continue;
-            }
-            long k = sum / 9;
-            long min = Math.min(Math.min(arr[0], arr[1]), arr[2]);
-            if(min < k) {
-                System.out.println("NO");
-                continue;
-            }
-            System.out.println("YES");
+            testCase(true);
         }
     }
 
@@ -40,7 +21,36 @@ public class P1463A {
         if (flag) {
             FastScanner fs = new FastScanner();
         } else {
+            int[] arr = {1,2,4,3,8,5,7,9};
+            mergeSort(arr, 0, arr.length-1);
+            print(arr);
+        }
+    }
 
+    private static void mergeSort (int[] arr, int start, int end) {
+        if (start != end) {
+            int mid = start + ( end - start ) / 2;
+            mergeSort(arr, start, mid);
+            mergeSort(arr, mid + 1, end);
+            merge(arr, start, mid, end);
+        }
+    }
+
+    private static void merge (int[] arr, int start, int mid, int end) {
+        List<Integer> temp = new ArrayList<>();
+        int l = start, r = mid + 1;
+        while (l <= mid && r <= end) {
+            if(arr[l] < arr[r]) {
+                temp.add(arr[l++]);
+            } else {
+                temp.add(arr[r++]);
+            }
+        }
+        while(l <= mid) temp.add(arr[l++]);
+        while(r <= end) temp.add(arr[r++]);
+        int i = start;
+        for(int ele: temp) {
+            arr[start++] = ele;
         }
     }
 

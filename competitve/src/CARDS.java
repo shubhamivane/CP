@@ -5,35 +5,27 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class P1463A {
+public class CARDS {
+
+    //    https://www.spoj.com/problems/CRDS/
+    private static int mod = 1000007;
 
     public static void main (String[] args) {
         testCases();
     }
-
     public static void testCases () {
         FastScanner fs = new FastScanner();
         int T = fs.nextInt();
-        int n = 3;
-        long sum;
+        long h;
         for (int tt = 0 ; tt < T ; tt++) {
-            long[] arr = fs.readLongArray(n);
-            sum = 0;
-            sum += arr[0];
-            sum += arr[1];
-            sum += arr[2];
-            if (sum % 9 != 0) {
-                System.out.println("NO");
-                continue;
-            }
-            long k = sum / 9;
-            long min = Math.min(Math.min(arr[0], arr[1]), arr[2]);
-            if(min < k) {
-                System.out.println("NO");
-                continue;
-            }
-            System.out.println("YES");
+            h = fs.nextLong();
+            System.out.println(((h * (3 * h + 1)) / 2 ) % mod);
         }
+    }
+
+    private static long sumFrom1ToN (long n) {
+		long sum = n;
+		return ((((sum % mod) * ((sum + 1) % mod)) % mod) / 2);
     }
 
     public static void testCase (boolean flag) {

@@ -5,34 +5,20 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class P1463A {
+public class GeeksForGeeksFlipkartProblem3 {
+
+    private static int[] disjointSet;
+    private static int[] parentSum;
 
     public static void main (String[] args) {
-        testCases();
+        testCase(false);
     }
 
     public static void testCases () {
         FastScanner fs = new FastScanner();
         int T = fs.nextInt();
-        int n = 3;
-        long sum;
         for (int tt = 0 ; tt < T ; tt++) {
-            long[] arr = fs.readLongArray(n);
-            sum = 0;
-            sum += arr[0];
-            sum += arr[1];
-            sum += arr[2];
-            if (sum % 9 != 0) {
-                System.out.println("NO");
-                continue;
-            }
-            long k = sum / 9;
-            long min = Math.min(Math.min(arr[0], arr[1]), arr[2]);
-            if(min < k) {
-                System.out.println("NO");
-                continue;
-            }
-            System.out.println("YES");
+            testCase(true);
         }
     }
 
@@ -40,8 +26,50 @@ public class P1463A {
         if (flag) {
             FastScanner fs = new FastScanner();
         } else {
-
+            int v = 7;
+            int e = 4;
+            int[] values = {10, 25, 5, 15, 5, 20, 0};
+            int[][] edges = { {1,2} ,{3,4}, {4,5} ,{6,7} };
+            print(solve(v, e, values, edges));
         }
+    }
+
+    private static long solve (int V, int E, int[] Values, int[][] Edges) {
+        int max = 0;
+        disjointSet = new int[Values.length + 1];
+        parentSum = new int[Values.length + 1];
+        for (int i = 0 ; i < Values.length ; i++) {
+            disjointSet[i + 1] = i + 1;
+            parentSum[i+1] = Values[i];
+        }
+        for (int[] edge : Edges) {
+            union(edge[0], edge[1]);
+        }
+        for(int i = 1 ; i <= Values.length ; i++) {
+            max = Math.max(max, parentSum[i]);
+        }
+        return max;
+    }
+
+    private static void union (int node1, int node2) {
+        int node1Parent = find(node1);
+        int node2Parent = find(node2);
+        if(node1Parent != node2Parent) {
+            parentSum[node1Parent] += parentSum[node2Parent];
+            disjointSet[node2Parent] = node1Parent;
+        }
+    }
+
+    private static int find (int node) {
+        int parent = node;
+        while (parent != getParent(node)) {
+            parent = getParent(node);
+        }
+        return parent;
+    }
+
+    private static int getParent (int node) {
+        return disjointSet[node];
     }
 
     static class FastScanner {
@@ -89,6 +117,7 @@ public class P1463A {
         }
     }
 
+
     static void print (int n) {
         System.out.println(n);
     }
@@ -117,6 +146,10 @@ public class P1463A {
         System.out.println(Arrays.toString(arr));
     }
 
+    static void print (char[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+
     static void print (float[] arr) {
         System.out.println(Arrays.toString(arr));
     }
@@ -138,5 +171,4 @@ public class P1463A {
             print(arr[i]);
         }
     }
-
 }

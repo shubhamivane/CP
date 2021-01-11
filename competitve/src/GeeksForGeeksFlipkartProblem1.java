@@ -5,34 +5,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class P1463A {
+public class GeeksForGeeksFlipkartProblem1 {
 
     public static void main (String[] args) {
-        testCases();
+        testCase(false);
     }
 
     public static void testCases () {
         FastScanner fs = new FastScanner();
         int T = fs.nextInt();
-        int n = 3;
-        long sum;
         for (int tt = 0 ; tt < T ; tt++) {
-            long[] arr = fs.readLongArray(n);
-            sum = 0;
-            sum += arr[0];
-            sum += arr[1];
-            sum += arr[2];
-            if (sum % 9 != 0) {
-                System.out.println("NO");
-                continue;
-            }
-            long k = sum / 9;
-            long min = Math.min(Math.min(arr[0], arr[1]), arr[2]);
-            if(min < k) {
-                System.out.println("NO");
-                continue;
-            }
-            System.out.println("YES");
+            testCase(true);
         }
     }
 
@@ -40,8 +23,36 @@ public class P1463A {
         if (flag) {
             FastScanner fs = new FastScanner();
         } else {
-
+            print(smallestnum("55010"));
         }
+    }
+
+    public static String smallestnum (String N) {
+        char[] arr = N.toCharArray();
+        //        print(arr);
+        int[] memo = new int[10];
+        for (char ch : arr)
+            memo[ch - '0'] += 1;
+        //        print(memo);
+        StringBuilder stringBuilder = null;
+        for (int i = 1 ; i < 10 ; i++) {
+            if (memo[i] == 0)
+                continue;
+            if (stringBuilder == null) {
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(i);
+                memo[i]--;
+                while (memo[0] > 0) {
+                    stringBuilder.append("0");
+                    memo[0]--;
+                }
+            }
+            while (memo[i] > 0) {
+                stringBuilder.append(i);
+                memo[i]--;
+            }
+        }
+        return stringBuilder == null ? N : stringBuilder.toString();
     }
 
     static class FastScanner {
@@ -89,6 +100,7 @@ public class P1463A {
         }
     }
 
+
     static void print (int n) {
         System.out.println(n);
     }
@@ -117,6 +129,10 @@ public class P1463A {
         System.out.println(Arrays.toString(arr));
     }
 
+    static void print (char[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+
     static void print (float[] arr) {
         System.out.println(Arrays.toString(arr));
     }
@@ -138,5 +154,4 @@ public class P1463A {
             print(arr[i]);
         }
     }
-
 }
