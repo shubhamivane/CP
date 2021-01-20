@@ -1,81 +1,56 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.*;
-import java.util.StringTokenizer;
 
-public class PT07Z {
+public class Test2 {
 
-    /*
-     * https://www.spoj.com/problems/PT07Z/
-     */
-    private static Map<Integer, List<Integer>> graph = new HashMap<>();
-    private static int maxLength = 0;
+    private static int mod = 1;
 
     public static void main (String[] args) {
-        testCase(true);
+        testCases();
     }
 
     public static void testCases () {
         FastScanner fs = new FastScanner();
-        int T = fs.nextInt();
-        for (int tt = 0 ; tt < T ; tt++) {
-            testCase(true);
+        int[] a = {1, 3, 5, 7, 9, 11, 13, 15};
+        List<Integer> list = new ArrayList<>();
+        for(int ele: a) list.add(ele);
+        print(-1 * Collections.binarySearch(list,2) - 1);
+    }
+
+    private static long binPower (int n, int p) {
+        long ans = 1;
+        while (p > 0) {
+            if (( p & 1 ) == 1) {
+                ans = ans * n;
+            }
+            n = n * n;
+            p = p >> 1;
         }
+        return ans;
     }
 
-    public static void testCase (boolean flag) {
-//        if (flag) {
-//            FastScanner fs = new FastScanner();
-//            int n = fs.nextInt();
-//            int nodeSize = n;
-//            int[] arr;
-//            n--;
-//            int[] visited = new int[nodeSize+1];
-//            Arrays.fill(visited, 0);
-//            while (n-- > 0) {
-//                arr = fs.readArray(2);
-//                visited[arr[0]] += 1;
-//                visited[arr[1]] += 1;
-//                addEdge(arr[0], arr[1]);
-//                addEdge(arr[1], arr[0]);
-//            }
-//            int start = 0;
-//            for(int i: visited) {
-//                if(i == 1) {
-//                    start = i;
-//                    break;
-//                }
-//            }
-//            Arrays.fill(visited, 0);
-//            DFS(start, visited, 0);
-//            print(maxLength);
-//        } else {
-//
-//        }
+    private static long mulUnderMod (int m, int n) {
+        return ( ( m % mod ) * ( n % mod ) ) % mod;
     }
 
-//    private static int DFS(int start, int[] visited, int sizeOfThePath) {
-////        print("sizeOfThePath: " + sizeOfThePath);
-//        if(visited[start] == 1) {
-//            return ;
-//        }
-//        visited[start] = 1;
-//        int m, m1=-1, m2=-1;
-//        for(int ele: graph.get(start)) {
-//            m = DFS(ele, visited, sizeOfThePath + 1);
-//        }
-//        maxLength = Math.max(maxLength, sizeOfThePath);
-//    }
-
-    private static void addEdge (int node1, int node2) {
-        List<Integer> node1AdjacencyList = graph.getOrDefault(node1, new ArrayList<>());
-        node1AdjacencyList.add(node2);
-        graph.put(node1, node1AdjacencyList);
+    private static int gcd (int a, int b) {
+        int temp;
+        if (a < b) {
+            temp = a;
+            a = b;
+            b = temp;
+        }
+        while (b > 0) {
+            a = a % b;
+            temp = a;
+            a = b;
+            b = temp;
+        }
+        return a;
     }
+
 
     static class FastScanner {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -162,10 +137,6 @@ public class PT07Z {
         System.out.println(Arrays.toString(arr));
     }
 
-    static void print (boolean[] arr) {
-        System.out.println(Arrays.toString(arr));
-    }
-
     static void print (boolean bool) {
         System.out.print(String.valueOf(bool));
     }
@@ -175,5 +146,4 @@ public class PT07Z {
             print(arr[i]);
         }
     }
-
 }

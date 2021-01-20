@@ -3,20 +3,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.*;
 import java.util.StringTokenizer;
 
-public class PT07Z {
+public class RotateList {
 
+    private static int mod = 1;
     /*
-     * https://www.spoj.com/problems/PT07Z/
+     * https://leetcode.com/problems/rotate-list/
      */
-    private static Map<Integer, List<Integer>> graph = new HashMap<>();
-    private static int maxLength = 0;
 
     public static void main (String[] args) {
-        testCase(true);
+        testCase(false);
     }
 
     public static void testCases () {
@@ -28,54 +25,96 @@ public class PT07Z {
     }
 
     public static void testCase (boolean flag) {
-//        if (flag) {
-//            FastScanner fs = new FastScanner();
-//            int n = fs.nextInt();
-//            int nodeSize = n;
-//            int[] arr;
-//            n--;
-//            int[] visited = new int[nodeSize+1];
-//            Arrays.fill(visited, 0);
-//            while (n-- > 0) {
-//                arr = fs.readArray(2);
-//                visited[arr[0]] += 1;
-//                visited[arr[1]] += 1;
-//                addEdge(arr[0], arr[1]);
-//                addEdge(arr[1], arr[0]);
-//            }
-//            int start = 0;
-//            for(int i: visited) {
-//                if(i == 1) {
-//                    start = i;
-//                    break;
-//                }
-//            }
-//            Arrays.fill(visited, 0);
-//            DFS(start, visited, 0);
-//            print(maxLength);
-//        } else {
-//
-//        }
+        if (flag) {
+            FastScanner fs = new FastScanner();
+        } else {
+            ListNode node = new ListNode(1);
+            node.next = new ListNode(2);
+            node.next.next = new ListNode(3);
+            node.next.next.next = new ListNode(4);
+            node.next.next.next.next = new ListNode(5);
+            ListNode head = rotateRight(node, 2);
+            while (head != null) {
+                print(head.val + " ");
+                head = head.next;
+            }
+        }
     }
 
-//    private static int DFS(int start, int[] visited, int sizeOfThePath) {
-////        print("sizeOfThePath: " + sizeOfThePath);
-//        if(visited[start] == 1) {
-//            return ;
-//        }
-//        visited[start] = 1;
-//        int m, m1=-1, m2=-1;
-//        for(int ele: graph.get(start)) {
-//            m = DFS(ele, visited, sizeOfThePath + 1);
-//        }
-//        maxLength = Math.max(maxLength, sizeOfThePath);
-//    }
-
-    private static void addEdge (int node1, int node2) {
-        List<Integer> node1AdjacencyList = graph.getOrDefault(node1, new ArrayList<>());
-        node1AdjacencyList.add(node2);
-        graph.put(node1, node1AdjacencyList);
+    private static ListNode rotateRight (ListNode head, int k) {
+        ListNode fastNode = null, slowNode = null;
+        while (k-- > 0) {
+            fastNode = (fastNode.next == null) ? head : fastNode.next;
+        }
+        if (fastNode == head) {
+            return head;
+        }
+        ListNode prevFastNode = null;
+        while (fastNode != null) {
+            prevFastNode = fastNode;
+            fastNode = fastNode.next;
+            if (slowNode == null)
+                slowNode = head;
+            else
+                slowNode = slowNode.next;
+        }
+        print(slowNode.val + "\n");
+        fastNode = slowNode.next;
+        slowNode.next = null;
+        prevFastNode.next = head;
+        print(fastNode.val + "\n");
+        return fastNode;
     }
+
+    private static long binPower (int n, int p) {
+        long ans = 1;
+        while (p > 0) {
+            if (( p & 1 ) == 1) {
+                ans = ans * n;
+            }
+            n = n * n;
+            p = p >> 1;
+        }
+        return ans;
+    }
+
+    private static long mulUnderMod (int m, int n) {
+        return ( ( m % mod ) * ( n % mod ) ) % mod;
+    }
+
+    private static int gcd (int a, int b) {
+        int temp;
+        if (a < b) {
+            temp = a;
+            a = b;
+            b = temp;
+        }
+        while (b > 0) {
+            a = a % b;
+            temp = a;
+            a = b;
+            b = temp;
+        }
+        return a;
+    }
+
+    static public class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode () {
+        }
+
+        ListNode (int val) {
+            this.val = val;
+        }
+
+        ListNode (int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
 
     static class FastScanner {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -159,10 +198,6 @@ public class PT07Z {
     }
 
     static void print (double[] arr) {
-        System.out.println(Arrays.toString(arr));
-    }
-
-    static void print (boolean[] arr) {
         System.out.println(Arrays.toString(arr));
     }
 

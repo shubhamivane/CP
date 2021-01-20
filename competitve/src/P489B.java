@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Template {
+public class P489B {
 
     private static int mod = 1;
 
@@ -15,7 +15,48 @@ public class Template {
         FastScanner fs = new FastScanner();
         int T = true ? 1 : fs.nextInt();
         for (int tt = 0 ; tt < T ; tt++) {
-
+            int gc = fs.nextInt();
+            int[] g = fs.readArray(gc);
+            int bc = fs.nextInt();
+            int[] b = fs.readArray(bc);
+            int pairs = 0, idx;
+            int[] bFreq = new int[101];
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (int ele : b) {
+                bFreq[ele]++;
+                if (bFreq[ele] == 1) {
+                    temp.add(ele);
+                }
+            }
+            Collections.sort(temp);
+            Arrays.sort(g);
+            //            print(temp);
+            for (int i = 0 ; i < g.length ; i++) {
+                int target = g[i] - 1;
+                idx = Collections.binarySearch(temp, target);
+                if (idx >= 0 && idx < temp.size() && temp.get(idx) == target && bFreq[target] > 0) {
+                    //                    print(g[i] + " " + temp.get(idx-1));
+                    pairs++;
+                    bFreq[target]--;
+                    continue;
+                }
+                target = g[i];
+                idx = Collections.binarySearch(temp, g[i]);
+                if (idx >= 0 && idx < temp.size() && temp.get(idx) == target && bFreq[target] > 0) {
+                    //                    print(g[i] + " " + temp.get(idx));
+                    pairs++;
+                    bFreq[target]--;
+                    continue;
+                }
+                target = g[i] + 1;
+                idx = Collections.binarySearch(temp, target);
+                if (idx >= 0 && idx < temp.size() && temp.get(idx) == target && bFreq[target] > 0) {
+                    //                    print(g[i] + " " + temp.get(idx+1));
+                    pairs++;
+                    bFreq[target]--;
+                }
+            }
+            print(pairs);
         }
     }
 
