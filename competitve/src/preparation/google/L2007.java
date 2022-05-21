@@ -1,13 +1,18 @@
+package preparation.google;
+
+import org.jetbrains.annotations.Contract;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class P327A {
+public class L2007 {
 
     private static int mod = 1;
+    private enum TreeTraversalOrder {
+        PREORDER, INORDER, POSTORDER;
+    }
 
     public static void main (String[] args) {
         testCases();
@@ -17,27 +22,101 @@ public class P327A {
         FastScanner fs = new FastScanner();
         int T = true ? 1 : fs.nextInt();
         for (int tt = 0 ; tt < T ; tt++) {
-            int n = fs.nextInt(), max = 0, cnt = 0;
-            int[] arr = fs.readArray(n);
-            int[] presum1 = new int[n];
-            int[] presum2 = new int[n];
-            presum1[0] = arr[0] == 1 ? 1 : 0;
-            presum2[0] = arr[0] == 1 ? -1 : 1;
-            int sum1 = arr[0] == 1 ? 1 : 0;
-            for (int i = 1 ; i < n ; i++) {
-                if (arr[i] == 1)
-                    sum1++;
-                presum1[i] = arr[i] + presum1[i - 1];
+            int[] arr = {0, 4, 2};
+            print(findOriginalArray(arr));
+        }
+    }
+
+    private static int[] findOriginalArray(int[] changed) {
+        Map<Integer, Integer> numToFreq = new HashMap<>();
+        for(int ele: changed) {
+            numToFreq.put(ele, numToFreq.getOrDefault(ele, 0) + 1);
+        }
+        List<Integer> originalArray = new ArrayList<>();
+        Arrays.sort(changed);
+        for(int ele: changed) {
+            if(numToFreq.getOrDefault(ele, 0) == 0) {
+                continue;
             }
-//            int max = Integer.MIN_VALUE;
-            for (int i = 0 ; i < n ; i++) {
-                if(arr[i] == 1) {
-                    //
-                } else {
-//
-                }
+            int eleFreq = numToFreq.get(ele);
+            int ele2xFreq = numToFreq.getOrDefault(ele*2, 0);
+            if(ele == 2*ele) {
+                for(int i = 1 ; i <= eleFreq/2 ; i++)
+                    originalArray.add(ele);
+//                numToFreq
+                continue;
             }
-            print(max);
+            if(eleFreq <= ele2xFreq) {
+                numToFreq.put(ele, 0);
+                numToFreq.put(2*ele, ele2xFreq-eleFreq);
+                for(int i = 1 ; i <= eleFreq ; i++)
+                    originalArray.add(ele);
+            }
+        }
+        for(Map.Entry<Integer, Integer> entry: numToFreq.entrySet()) {
+            if(entry.getValue() != 0) {
+                return new int[0];
+            }
+        }
+        int[] array = new int[originalArray.size()];
+        int idx=0;
+        for(Integer ele: originalArray) {
+            array[idx++]=ele;
+        }
+        return array;
+    }
+
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        @Contract(pure = true)
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    private static TreeNode convertArrayToTree(int[] arr, int idx) {
+        TreeNode treeNode = new TreeNode(arr[idx]);
+        if (2 * idx + 1 < arr.length) {
+            treeNode.right = convertArrayToTree(arr, 2 * idx + 2);
+        }
+        if (2 * idx + 2 < arr.length) {
+            treeNode.left = convertArrayToTree(arr, 2 * idx + 1);
+        }
+        return treeNode;
+    }
+
+    private static void printTree(TreeNode root, TreeTraversalOrder treeTraversalOrder) {
+        if (root == null) {
+            return;
+        }
+        switch (treeTraversalOrder) {
+            case INORDER:
+                printTree(root.left, treeTraversalOrder);
+                print(root.val + " ");
+                printTree(root.right, treeTraversalOrder);
+                break;
+            case PREORDER:
+                print(root.val + " ");
+                printTree(root.left, treeTraversalOrder);
+                printTree(root.right, treeTraversalOrder);
+                break;
+            case POSTORDER:
+                printTree(root.left, treeTraversalOrder);
+                printTree(root.right, treeTraversalOrder);
+                print(root.val + " ");
+                break;
         }
     }
 

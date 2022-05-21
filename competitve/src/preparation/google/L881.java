@@ -1,3 +1,7 @@
+package preparation.google;
+
+import org.jetbrains.annotations.Contract;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -5,9 +9,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 
-public class P327A {
+public class L881 {
 
     private static int mod = 1;
+    private enum TreeTraversalOrder {
+        PREORDER, INORDER, POSTORDER;
+    }
 
     public static void main (String[] args) {
         testCases();
@@ -17,27 +24,80 @@ public class P327A {
         FastScanner fs = new FastScanner();
         int T = true ? 1 : fs.nextInt();
         for (int tt = 0 ; tt < T ; tt++) {
-            int n = fs.nextInt(), max = 0, cnt = 0;
-            int[] arr = fs.readArray(n);
-            int[] presum1 = new int[n];
-            int[] presum2 = new int[n];
-            presum1[0] = arr[0] == 1 ? 1 : 0;
-            presum2[0] = arr[0] == 1 ? -1 : 1;
-            int sum1 = arr[0] == 1 ? 1 : 0;
-            for (int i = 1 ; i < n ; i++) {
-                if (arr[i] == 1)
-                    sum1++;
-                presum1[i] = arr[i] + presum1[i - 1];
+            int[] people = {5,1,4,2};
+            int limit = 5;
+            print(numRescueBoats(people, limit));
+        }
+    }
+
+    public static int numRescueBoats(int[] people, int limit) {
+        Arrays.sort(people);
+        int boatCnt = 0;
+        int currWeight = 0;
+        for(int i = 0 ; i < people.length ; i++) {
+            if(people[i] + currWeight >= limit) {
+                boatCnt++;
+                currWeight = (people[i] + currWeight) > limit ? people[i] : 0;
+            } else {
+                currWeight += people[i];
             }
-//            int max = Integer.MIN_VALUE;
-            for (int i = 0 ; i < n ; i++) {
-                if(arr[i] == 1) {
-                    //
-                } else {
-//
-                }
-            }
-            print(max);
+        }
+        if(currWeight > 0) {
+            boatCnt++;
+        }
+        return boatCnt;
+    }
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        @Contract(pure = true)
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    private static TreeNode convertArrayToTree(int[] arr, int idx) {
+        TreeNode treeNode = new TreeNode(arr[idx]);
+        if (2 * idx + 1 < arr.length) {
+            treeNode.right = convertArrayToTree(arr, 2 * idx + 2);
+        }
+        if (2 * idx + 2 < arr.length) {
+            treeNode.left = convertArrayToTree(arr, 2 * idx + 1);
+        }
+        return treeNode;
+    }
+
+    private static void printTree(TreeNode root, TreeTraversalOrder treeTraversalOrder) {
+        if (root == null) {
+            return;
+        }
+        switch (treeTraversalOrder) {
+            case INORDER:
+                printTree(root.left, treeTraversalOrder);
+                print(root.val + " ");
+                printTree(root.right, treeTraversalOrder);
+                break;
+            case PREORDER:
+                print(root.val + " ");
+                printTree(root.left, treeTraversalOrder);
+                printTree(root.right, treeTraversalOrder);
+                break;
+            case POSTORDER:
+                printTree(root.left, treeTraversalOrder);
+                printTree(root.right, treeTraversalOrder);
+                print(root.val + " ");
+                break;
         }
     }
 
